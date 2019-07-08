@@ -8,23 +8,22 @@ import torch.nn as nn
 class cellular_dataset(Dataset):
     def __init__(self, df, channel, mode='train', transforms=None):
         self.df = df
-        self.df = self.df[self.df['channel'] == channel].reset_index(drop=True)
-        print(f"Number of data loaded is {self.df.shape}")
-        print(f"Channel is {channel}")
-        print(f"Mode is {mode}")
+        self.channel = channel
         self.mode = mode
-
-        self.filepath = np.asarray(self.df.iloc[:, -3])
-        if self.mode == 'train':
-            self.sirna = np.asarray(self.df.iloc[:, 4])
-        # self.channel = np.asarray(self.df.iloc[:, -2])
-        self.site = np.asarray(self.df.iloc[:, -1])
-        self.id_code = np.asarray(self.df.iloc[:, 0])
+        self.transforms = transforms
+        self.df = self.df[self.df['channel'] == self.channel].reset_index(drop=True)
+        print(f"Number of data loaded is {self.df.shape}")
+        print(f"Channel is {self.channel}")
+        print(f"Mode is {self.mode}")
         self.data_len = len(self.df.index)
+        self.filepath = np.asarray(self.df['filepath'])
+        if self.mode == 'train':
+            self.sirna = np.asarray(self.df['sirna'])
+        else:
+            self.id_code = np.asarray(self.df['id_code'])
 
     def __getitem__(self, index):
         img = cv2.imread(self.filepath[index])
-        # img_ = cv2.bitwise_not(img_)
         img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         # img_ = cv2.bitwise_not(img_)
         if self.transforms is not None:
@@ -43,12 +42,11 @@ class cv_dataset(Dataset):
         self.id_column = id_column
         self.targetcolumn = targetcolumn
         self.transforms = transforms
-        print(f"Number of data loaded is {self.df.shape}")
-        print(f"Mode is {mode}")
         self.mode = mode
+        print(f"Number of data loaded is {self.df.shape}")
+        print(f"Mode is {self.mode}")
         self.filepath = np.asarray(self.df[imagepathcolumn])
         self.data_len = len(self.df.index)
-        self._create_cols()
 
     def _create_cols(self):
         if self.mode == 'train':
@@ -58,7 +56,7 @@ class cv_dataset(Dataset):
 
     def __getitem__(self, index):
         img = cv2.imread(self.filepath[index])
-        #self._create_cols()
+        self._create_cols()
         if self.transforms is not None:
             img = self.transforms(img)
         if self.mode == 'train':
