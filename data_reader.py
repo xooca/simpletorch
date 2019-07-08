@@ -38,10 +38,9 @@ class cellular_dataset(Dataset):
 
 class cv_dataset(Dataset):
     def __init__(self, df, labelcol,imagepathcolumn, transforms=None):
-        self.df = df
+        self.df = df.reset_index(drop=True)
         self.transforms = transforms
         print(f"Number of data loaded is {self.df.shape}")
-        print(f"Mode is {self.mode}")
         self.filepath = np.asarray(self.df[imagepathcolumn])
         self.data_len = len(self.df.index)
         self.labelcol = labelcol
