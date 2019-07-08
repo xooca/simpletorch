@@ -13,6 +13,7 @@ class cellular_dataset(Dataset):
         print(f"Channel is {channel}")
         print(f"Mode is {mode}")
         self.mode = mode
+
         self.filepath = np.asarray(self.df.iloc[:, -3])
         if self.mode == 'train':
             self.sirna = np.asarray(self.df.iloc[:, 4])
