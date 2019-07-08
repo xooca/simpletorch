@@ -37,32 +37,24 @@ class cellular_dataset(Dataset):
         return self.data_len
 
 class cv_dataset(Dataset):
-    def __init__(self, df, id_column, imagepathcolumn, targetcolumn,mode='train', transforms=None):
+    def __init__(self, df, labelcol,imagepathcolumn, transforms=None):
         self.df = df
-        self.id_column = id_column
-        self.targetcolumn = targetcolumn
         self.transforms = transforms
-        self.mode = mode
         print(f"Number of data loaded is {self.df.shape}")
         print(f"Mode is {self.mode}")
         self.filepath = np.asarray(self.df[imagepathcolumn])
         self.data_len = len(self.df.index)
+        self.labelcol = labelcol
+        self._labelcol(self)
 
-    def _create_cols(self):
-        if self.mode == 'train':
-            self.target = np.asarray(self.df[self.targetcolumn])
-        else:
-            self.id_column = np.asarray(self.df[self.id_column])
+    def _labelcol(self):
+        self.returnval = np.asarray(self.df[self.labelcol])
 
     def __getitem__(self, index):
         img = cv2.imread(self.filepath[index])
-        self._create_cols()
         if self.transforms is not None:
             img = self.transforms(img)
-        if self.mode == 'train':
-            return img, self.target[index]
-        else:
-            return img, self.id_column[index]
+        return img, self.returnval[index]
 
     def __len__(self):
         return self.data_len
