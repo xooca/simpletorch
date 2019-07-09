@@ -26,6 +26,7 @@ class cellular_dataset(Dataset):
         img = cv2.imread(self.filepath[index])
         img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         # img_ = cv2.bitwise_not(img_)
+
         if self.transforms is not None:
             img = self.transforms(img)
         if self.mode == 'train':
