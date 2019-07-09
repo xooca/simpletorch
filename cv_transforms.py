@@ -61,3 +61,4 @@ class singleimage_transforms:
                     cv2.imwrite(newimagepath, image)
                 except:
                     print("file {0} is not converted".format(images))
+

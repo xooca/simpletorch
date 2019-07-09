@@ -2,6 +2,8 @@ from torch.utils.data import Dataset, DataLoader
 import numpy as np
 import pandas as pd
 import cv2
+import torch
+from torch.utils.data.sampler import SubsetRandomSampler
 import torch.nn.functional as F
 import torch.nn as nn
 
@@ -58,3 +60,25 @@ class cv_dataset(Dataset):
 
     def __len__(self):
         return self.data_len
+
+class cv_data_splitters:
+    def __init__(self,df,batch_size=32,valid_size=.3,split_batch_th=0):
+        self.df = df
+        self.batch_size = batch_size
+        self.valid_size = valid_size
+        self.split_batch_th = split_batch_th
+
+    def cellular_load_split_train_test(self,channel, transforms=None):
+        all_data = cellular_dataset(self.df, channel=channel, mode='train', transforms=transforms)
+        num_train = len(all_data)
+        if self.split_batch_th > 0:
+            num_train = self.split_batch_th
+        indices = list(range(num_train))
+        split = int(np.floor(self.valid_size * num_train))
+        np.random.shuffle(indices)
+        train_idx, test_idx = indices[split:], indices[:split]
+        train_sampler = SubsetRandomSampler(train_idx)
+        test_sampler = SubsetRandomSampler(test_idx)
+        trainloader = torch.utils.data.DataLoader(all_data, sampler=train_sampler, batch_size=self.batch_size, num_workers=2)
+        testloader = torch.utils.data.DataLoader(all_data, sampler=test_sampler, batch_size=self.batch_size, num_workers=2)
+        return trainloader, testloader
