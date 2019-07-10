@@ -214,9 +214,9 @@ class resnet152(nn.Module):
 
     def create_model(self, output_class=1000, input_channel=6, freezelonlylastlayer=False,last_layer=None):
         if self.pretrained:
-            self.model  = models.resnet152(pretrained=True)
+            self.model = models.resnet152(pretrained=True)
         else:
-            self.model  = models.resnet152(pretrained=False)
+            self.model = models.resnet152(pretrained=False)
             checkpoint = torch.load(self.modelpath)
             self.model.load_state_dict(checkpoint)
             del checkpoint

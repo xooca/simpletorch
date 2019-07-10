@@ -12,34 +12,39 @@ class modeldefinition:
         #self.modelnumber = modelnumber
         #self.models = models(pretrained=modelpath ,modelpath=self.modelpath )
 
-    def definedensenet201(self,output_class=1000, input_channel=6, freezelonlylastlayer=False,modelpath=None):
+    def definedensenet201(self,output_class=1000, input_channel=6, freezelonlylastlayer=False,modelpath=None,
+                          last_layer=None):
         model = models.densenet201(pretrained=self.pretrained,modelpath=modelpath)
         model.create_model(output_class=output_class, input_channel=input_channel,
-                           freezelonlylastlayer=freezelonlylastlayer)
+                           freezelonlylastlayer=freezelonlylastlayer,last_layer=last_layer)
         return model
 
-    def definedensenet161(self,output_class=1000, input_channel=6, freezelonlylastlayer=False,modelpath=None):
+    def definedensenet161(self,output_class=1000, input_channel=6, freezelonlylastlayer=False,modelpath=None,
+                          last_layer=None):
         model = models.densenet161(pretrained=self.pretrained,modelpath=modelpath)
         model.create_model(output_class=output_class, input_channel=input_channel,
-                           freezelonlylastlayer=freezelonlylastlayer)
+                           freezelonlylastlayer=freezelonlylastlayer,last_layer=last_layer)
         return model
 
-    def defineresnet50(self,output_class=1000, input_channel=6, freezelonlylastlayer=False,modelpath=None):
+    def defineresnet50(self,output_class=1000, input_channel=6, freezelonlylastlayer=False,modelpath=None,
+                       last_layer=None):
         model = models.resnet50(pretrained=self.pretrained,modelpath=modelpath)
         model.create_model(output_class=output_class, input_channel=input_channel,
-                           freezelonlylastlayer=freezelonlylastlayer)
+                           freezelonlylastlayer=freezelonlylastlayer,last_layer=last_layer)
         return model
 
-    def defineresnet152(self,output_class=1000, input_channel=6, freezelonlylastlayer=False, modelpath=None):
+    def defineresnet152(self,output_class=1000, input_channel=6, freezelonlylastlayer=False, modelpath=None,
+                        last_layer=None):
         model = models.resnet152(pretrained=self.pretrained,modelpath=modelpath)
         model.create_model(output_class=output_class, input_channel=input_channel,
-                           freezelonlylastlayer=freezelonlylastlayer)
+                           freezelonlylastlayer=freezelonlylastlayer,last_layer=last_layer)
         return model
 
-    def defineinceptionv3(self,output_class=1000, input_channel=6, freezelonlylastlayer=False, modelpath=None):
+    def defineinceptionv3(self,output_class=1000, input_channel=6, freezelonlylastlayer=False, modelpath=None,
+                          last_layer=None):
         model = models.inceptionv3(pretrained=self.pretrained,modelpath=modelpath)
         model.create_model(output_class=output_class, input_channel=input_channel,
-                           freezelonlylastlayer=freezelonlylastlayer)
+                           freezelonlylastlayer=freezelonlylastlayer,last_layer=last_layer)
         return model
 
     def train_valid_loader(self,df,batch_size=32,valid_size=0.3,channel=1,train_test_transforms=None,split_batch_th=0):
